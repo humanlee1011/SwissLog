@@ -1,0 +1,17 @@
+gensim==3.8.1
+   2 numpy==1.18.5
+   3 wordninja==2.0.0
+   4 bert_serving_client==1.10.0
+   5 fasttext==0.9.1
+   6 ipdb==0.13.4
+   7 scipy==1.6.1
+   8 tqdm==4.46.1
+   9 jieba==0.42.1
+  10 pandas==1.2.3
+  11 torch==1.1.0
+  12 bert_serving==0.0.1
+  13 datasketch==1.5.3
+  14 hashes==1.1.0
+  15 python_Levenshtein==0.12.2
+  16 scikit_learn==0.24.1
+  17 tensorboardX==2.1
