@@ -1,9 +1,11 @@
 # SwissLog
-The source code of ISSRE'20 conference paper [SwissLog](https://ieeexplore.ieee.org/abstract/document/9251078/). We have submitted an extended version to a journal, and the source code of extended version will be released soon. 
+The source code of ISSRE'20 conference paper [SwissLog](https://ieeexplore.ieee.org/abstract/document/9251078/). We have submitted an extended version to a journal, and the source code here is the extended version. 
 
 The file structure is as belows:
 ```
 SwissLog
+├─anomaly_detection
+│  └─encoder
 ├─offline_logparser
 │  ├─evaluator
 │  ├─layers
