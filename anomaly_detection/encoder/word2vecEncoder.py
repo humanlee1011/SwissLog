@@ -9,7 +9,8 @@ from sklearn.feature_extraction.text import TfidfTransformer
 import numpy as np
 import gensim
 import argparse
-class Word2Vec:
+
+class SemanticVec:
 
     def __init__(self, w2vmodel, t2wFN, embed_dim):
         # self.corpus = corpus
