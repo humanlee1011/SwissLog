@@ -39,25 +39,66 @@ class Trie:
         return now.tag
     
 
-    def update(self, old_template, template):
-        # TODO: how to split the treenode
-        # delete
-        # self.print()
+    # def update(self, old_template, template):
+    #     # TODO: how to split the treenode
+    #     # delete
+    #     # self.print()
+    #     paths = list()
+    #     now = self.root
+    #     for token in old_template:
+    #         if token in now.childs:
+    #             if len(now.childs) == 1:
+    #                 paths.append(now)
+    #             else:
+    #                 paths = []
+    #             now = now.childs[token]
+    #     clusterID = now.tag
+    #     if paths == []:
+    #         import pdb; pdb.set_trace()
+    #     paths[0].childs = dict()
+    #     # insert
+    #     self.insert(template, clusterID)
+    #     return clusterID
+
+    # 还未测试
+    def update(self, old_template, template, cluster2Template):
+        if len(template) != len(old_template):
+            import pdb; pdb.set_trace()
         paths = list()
         now = self.root
-        for token in old_template:
-            if token in now.childs:
-                if len(now.childs) == 1:
-                    paths.append(now)
-                else:
-                    paths = []
-                now = now.childs[token]
-        clusterID = now.tag
-        if paths == []:
-            import pdb; pdb.set_trace()
-        paths[0].childs = dict()
-        # insert
-        self.insert(template, clusterID)
+        update_pos = -1
+        # import pdb; pdb.set_trace()
+        for i in range(len(old_template)):
+            old_token = old_template[i]
+            new_token = template[i]
+            if old_token != new_token and new_token == '<*>':
+                childs = now.childs
+                update_pos = i
+                break
+            now = now.childs[old_token]
+        now.value = '<*>'
+        # delete subtree
+        now.childs = dict()
+        # find all cluster ID
+        clusterIDs = self.find_cluster_id(childs)
+        clusterID = clusterIDs[0]
+        # 将所有cluster的<*>替换
+        templates = [cluster2Template[cid] for cid in clusterIDs]
+        # import pdb; pdb.set_trace()
+        for temp in templates:
+            temp[update_pos] = '<*>'
+            self.insert(temp, clusterID)
+        
+        # insert related template
+        return clusterID
+
+    def find_cluster_id(self, childs):
+        clusterID = []
+        for token, child in childs.items():
+            if child.tag == -1:
+                clusterID.extend(self.find_cluster_id(child.childs))
+            else:
+                clusterID.append(child.tag)
         return clusterID
 
     def print(self):
@@ -78,9 +119,6 @@ class Trie:
                 for key in now.childs.keys():
                     to_read.append(now.childs[key])
             del to_read[0]
-
-
-
 
 
 def maskdel(template):
@@ -189,7 +227,7 @@ class MaskOnlineLayer(Layer):
             # import pdb; pdb.set_trace()
             if updated_template != old_template:
                 # import pdb; pdb.set_trace()
-                clusterID = self.trie.update(old_template, updated_template)
+                clusterID = self.trie.update(old_template, updated_template, self.cluster2Template)
                 
                 self.results[log_entry['LineId']] = clusterID
                 self.cluster2Template[clusterID] = updated_template
